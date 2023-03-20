@@ -27,10 +27,21 @@ app.get('/api/hello', function (req, res) {
   res.json({ greeting: 'hello API' })
 })
 
+let randomNumber = Math.floor(Math.random() * (100 - 1 + 1)) + 1
+
 // Response with parsed as text request body
 app.post('/api/shorturl', function (req, res) {
   // Access to form input field with name="url"
-  res.json({ original_url: req.body.url, short_url: '1' })
+  res.json({ original_url: req.body.url, short_url: randomNumber })
+  console.log(randomNumber)
+})
+
+// Short URL
+app.get('/api/shorturl/' + randomNumber, function (req, res) {
+  console.log(req.body.url)
+  console.log('xxxxxxxx')
+  // res.redirect(req.body.url)
+  res.json({ result: 'GOOD!' })
 })
 
 app.listen(port, function () {
