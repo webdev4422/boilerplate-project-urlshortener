@@ -27,21 +27,26 @@ app.get('/api/hello', function (req, res) {
   res.json({ greeting: 'hello API' })
 })
 
-let randomNumber = Math.floor(Math.random() * (100 - 1 + 1)) + 1
+// Generate random number
+let randomNumber = Math.floor(Math.random() * (10 - 1 + 1)) + 1
+// Request variable to hold request value
+let reqUrl
+// Check valid URL
+const urlChecker = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/
 
 // Response with parsed as text request body
 app.post('/api/shorturl', function (req, res) {
   // Access to form input field with name="url"
-  res.json({ original_url: req.body.url, short_url: randomNumber })
-  console.log(randomNumber)
+  reqUrl = req.body.url
+  if (reqUrl.match(urlChecker)) {
+    res.json({ original_url: reqUrl, short_url: randomNumber })
+  }
+  res.json({ error: 'invalid url' })
 })
 
-// Short URL
+// Redirect short URL request
 app.get('/api/shorturl/' + randomNumber, function (req, res) {
-  console.log(req.body.url)
-  console.log('xxxxxxxx')
-  // res.redirect(req.body.url)
-  res.json({ result: 'GOOD!' })
+  res.redirect(reqUrl)
 })
 
 app.listen(port, function () {
